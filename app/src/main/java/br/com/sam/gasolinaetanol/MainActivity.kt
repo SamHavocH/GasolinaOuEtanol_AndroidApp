@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -28,7 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.sam.gasolinaetanol.ui.theme.Alert
 import br.com.sam.gasolinaetanol.ui.theme.GasolinaOuEtanolTheme
+import br.com.sam.gasolinaetanol.ui.theme.Success
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +76,8 @@ fun FuelCalculatorScreen() {
     ) {
         Text(
             text = "Gasolina x Etanol",
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         OutlinedTextField(
@@ -92,7 +96,10 @@ fun FuelCalculatorScreen() {
             modifier = Modifier.fillMaxWidth()
         )
 
-        Text(text = "Etanol compensa até: ${(threshold * 100).toInt()}%")
+        Text(
+            text = "Etanol compensa até: ${(threshold * 100).toInt()}%",
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Slider(
             value = threshold,
             onValueChange = { threshold = it },
@@ -102,15 +109,25 @@ fun FuelCalculatorScreen() {
         Card(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 if (result == null) {
-                    Text(text = "Informe os preços para calcular.")
+                    Text(
+                        text = "Informe os preços para calcular.",
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 } else {
                     val (etanol, ratio, advantage) = result
                     Text(
                         text = if (etanol) "Compensa ETANOL" else "Compensa GASOLINA",
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
+                        color = if (etanol) Success else Alert
                     )
-                    Text(text = "Razão etanol/gasolina: ${"%.2f".format(ratio)}")
-                    Text(text = "Diferença vs regra: ${"%.1f".format(advantage)}%")
+                    Text(
+                        text = "Razão etanol/gasolina: ${"%.2f".format(ratio)}",
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Diferença vs regra: ${"%.1f".format(advantage)}%",
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
                 }
             }
         }
@@ -120,7 +137,10 @@ fun FuelCalculatorScreen() {
                 gasText = ""
                 ethText = ""
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = MaterialTheme.colorScheme.primary
+            )
         ) {
             Text(text = "Limpar")
         }
